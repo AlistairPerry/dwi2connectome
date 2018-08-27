@@ -30,7 +30,7 @@ mkdir ${WORKDIR}/batch
 while read line
 do
 	subj=$(basename $line)
-	subjDIRECTORY=$line
+	subjBIDSDIRECTORY=$line
 	cp dtiblank ${WORKDIR}/batch/${SCRIPT}_$subj.sh
 	sed -i "s;&&&&;$pipedir;" ${WORKDIR}/batch/${SCRIPT}_$subj.sh
         #sed -i "s;&&&&;${WORKDIR};" batch/dti$subj.sh
