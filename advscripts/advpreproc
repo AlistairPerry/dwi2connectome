@@ -8,18 +8,26 @@ subj=$1
 WORKDIR=$2
 ismultiband=$3
 
+
+#Pull data from BIDS folders
+
 mkdir -p $WORKDIR/Diff/$subj/preproc 
 
-mrconvert *rawdata* $WORKDIR/Diff/$subj/preproc
-mrconvert *rawdata* $WORKDIR/Diff/$subj/preproc
+mrconvert dwi/sub-${subj}_acq-AP_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataAP.mif
+mrconvert dwi/sub-${subj}_acq-PA_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataPA.mif
 
-mrconvert T1.nii $WORKDIR/Diff/$subj/preproc
+mrconvert anat/sub-${subj}_T1w.nii.gz $WORKDIR/Diff/$subj/preproc/T1.nii
 
-#Now extract encoding
 
-cp 
+#Now extract the encoding files, and rename
+
+cp dwi/sub-${subj}_acq-AP_dwi.b $WORKDIR/Diff/$subj/preproc/rawencoding.b
+
+
+#Go to working directory
 
 cd $WORKDIR/Diff/$subj/preproc
+
 
 #Start preprocessing pipeline
 #Denoise
@@ -36,10 +44,12 @@ mrconvert rawdataPAdnstr.mif  rawdataPAdn.mif -strides +1,2,3,4 -force -nthreads
 rm rawdataAPdnstr.mif
 rm rawdataPAdnstr.mif 
 
+
 #Generate a b0 base image for each phase-encoding direction
 
 mrconvert rawdataAPdn.mif b0AP.mif -coord 3 0 -force -nthreads 1
 mrconvert rawdataPAdn.mif b0PA.mif -coord 3 0 -force -nthreads 1
+
 
 #First check that number of b0 volumes match
 numb0rev=$(mrinfo rawdataPAdn.mif -size | awk -F " " '{print $NF}')
@@ -52,7 +62,8 @@ srun -c 1 mrcat b0AP.mif b0PA.mif allb0s.mif -axis 3 -force -nthreads $ncpus
 
 else
 
-#Preprocessing steps including eddy correction & bias correction
+
+#Eddy correction & bias correction
 
 dwiextract rawdataAPdn.mif APb0s.mif -nthreads $ncpus -bzero -force
 dwiextract rawdataPAdn.mif PAb0s.mif -nthreads $ncpus -bzero -force
@@ -60,8 +71,6 @@ dwiextract rawdataPAdn.mif PAb0s.mif -nthreads $ncpus -bzero -force
 mrcat APb0s.mif PAb0s.mif allb0s.mif -axis 3 -force -nthreads 1
 
 fi
-
-#Preprocessing steps including eddy correction & bias correction
 
 dwiextract rawdataAPdn.mif APb0s.mif -bzero -force -nthreads $ncpus
 
@@ -97,7 +106,7 @@ fslmaths eddyb0brainfsl_mask -mas biasmaskMR.nii iterbrainmask
 
 gunzip iterbrainmask.nii.gz -f
 
-#dwishellmath biascorr.mif mean meanshell.mif -nthreads $ncpus -force
+dwishellmath biascorr.mif mean meanshell.mif -nthreads $ncpus -force
 
 
 #Create tensor and FA images
