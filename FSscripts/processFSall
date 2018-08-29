@@ -7,4 +7,4 @@ WORKDIR=$2
 SUBJECTS_DIR=${WORKDIR}/FS
 mkdir -p ${SUBJECTS_DIR}
 
-recon-all -all -i anat/sub-${subj}_T1w.nii.gz -subjid $subj -sd $SUBJECTS_DIR -no-isrunning -mprage
+recon-all -all -i anat/${subj}_T1w.nii.gz -subjid $subj -sd $SUBJECTS_DIR -no-isrunning -mprage

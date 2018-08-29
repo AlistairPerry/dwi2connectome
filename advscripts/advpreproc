@@ -8,20 +8,19 @@ subj=$1
 WORKDIR=$2
 ismultiband=$3
 
-
 #Pull data from BIDS folders
 
 mkdir -p $WORKDIR/Diff/$subj/preproc 
 
-mrconvert dwi/sub-${subj}_acq-AP_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataAP.mif
-mrconvert dwi/sub-${subj}_acq-PA_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataPA.mif
+mrconvert dwi/${subj}_acq-AP_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataAP.mif
+mrconvert dwi/${subj}_acq-PA_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataPA.mif
 
-mrconvert anat/sub-${subj}_T1w.nii.gz $WORKDIR/Diff/$subj/preproc/T1.nii
+mrconvert anat/${subj}_T1w.nii.gz $WORKDIR/Diff/$subj/preproc/T1.nii
 
 
 #Now extract the encoding files, and rename
 
-cp dwi/sub-${subj}_acq-AP_dwi.b $WORKDIR/Diff/$subj/preproc/rawencoding.b
+cp dwi/${subj}_acq-AP_dwi.b $WORKDIR/Diff/$subj/preproc/rawencoding.b
 
 
 #Go to working directory
