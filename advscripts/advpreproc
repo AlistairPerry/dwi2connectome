@@ -12,10 +12,10 @@ ismultiband=$3
 
 mkdir -p $WORKDIR/Diff/$subj/preproc 
 
-mrconvert dwi/${subj}_acq-AP_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataAP.mif
-mrconvert dwi/${subj}_acq-PA_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataPA.mif
+mrconvert dwi/${subj}_acq-AP_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataAP.mif -force -nthreads 1
+mrconvert dwi/${subj}_acq-PA_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdataPA.mif -force -nthreads 1
 
-mrconvert anat/${subj}_T1w.nii.gz $WORKDIR/Diff/$subj/preproc/T1.nii
+mrconvert anat/${subj}_T1w.nii.gz $WORKDIR/Diff/$subj/preproc/T1.nii -force -nthreads 1
 
 
 #Now extract the encoding files, and rename
@@ -33,7 +33,7 @@ cd $WORKDIR/Diff/$subj/preproc
 
 dwidenoise rawdataAP.mif rawdataAPdn.mif -force -nthreads $ncpus
 
-dwiextract rawdataPAdn.mif rawdataPArem.mif -force -nthreads $ncpus 
+dwiextract rawdataPA.mif rawdataPArem.mif -bzero -force -nthreads $ncpus 
 dwidenoise rawdataPArem.mif rawdataPAdn.mif -force -nthreads $ncpus
 
 mrconvert rawdataAPdn.mif rawdataAPdnstr.mif -strides +1,2,3,4 -force -nthreads $ncpus
@@ -42,6 +42,7 @@ mrconvert rawdataAPdnstr.mif  rawdataAPdn.mif  -force -nthreads $ncpus
 mrconvert rawdataPAdn.mif rawdataPAdnstr.mif -strides +1,2,3,4 -force -nthreads $ncpus
 mrconvert rawdataPAdnstr.mif  rawdataPAdn.mif -strides +1,2,3,4 -force -nthreads $ncpus
 
+rm rawdataPArem.mif
 rm rawdataAPdnstr.mif
 rm rawdataPAdnstr.mif 
 
