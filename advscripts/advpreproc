@@ -32,6 +32,8 @@ cd $WORKDIR/Diff/$subj/preproc
 #Denoise
 
 dwidenoise rawdataAP.mif rawdataAPdn.mif -force -nthreads $ncpus
+
+dwiextract rawdataPAdn.mif rawdataPArem.mif -force -nthreads $ncpus 
 dwidenoise rawdataPArem.mif rawdataPAdn.mif -force -nthreads $ncpus
 
 mrconvert rawdataAPdn.mif rawdataAPdnstr.mif -strides +1,2,3,4 -force -nthreads $ncpus
@@ -57,7 +59,7 @@ numb0main=$(mrinfo rawdataAPdn.mif -size | awk -F " " '{print $NF}')
 if [ "$numb0rev" != "$numb0main" ];
 then
 
-srun -c 1 mrcat b0AP.mif b0PA.mif allb0s.mif -axis 3 -force -nthreads $ncpus
+mrcat b0AP.mif b0PA.mif allb0s.mif -axis 3 -force -nthreads $ncpus
 
 else
 
