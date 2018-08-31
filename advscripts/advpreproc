@@ -46,15 +46,17 @@ rm rawdataAPdnstr.mif
 rm rawdataPAdnstr.mif 
 
 
-#Generate a b0 base image for each phase-encoding direction
+#Generate b0 images for each phase-encoding direction
 
 mrconvert rawdataAPdn.mif b0AP.mif -coord 3 0 -force -nthreads 1
 mrconvert rawdataPAdn.mif b0PA.mif -coord 3 0 -force -nthreads 1
 
+dwiextract rawdataAPdn.mif APb0s.mif -nthreads $ncpus -bzero -force
+dwiextract rawdataPAdn.mif PAb0s.mif -nthreads $ncpus -bzero -force
 
 #First check that number of b0 volumes match
-numb0rev=$(mrinfo rawdataPAdn.mif -size | awk -F " " '{print $NF}')
-numb0main=$(mrinfo rawdataAPdn.mif -size | awk -F " " '{print $NF}')
+numb0rev=$(mrinfo APb0s.mif -size | awk -F " " '{print $NF}')
+numb0main=$(mrinfo PAb0s.mif -size | awk -F " " '{print $NF}')
 
 if [ "$numb0rev" != "$numb0main" ];
 then
@@ -63,17 +65,11 @@ mrcat b0AP.mif b0PA.mif allb0s.mif -axis 3 -force -nthreads $ncpus
 
 else
 
-
-#Eddy correction & bias correction
-
-dwiextract rawdataAPdn.mif APb0s.mif -nthreads $ncpus -bzero -force
-dwiextract rawdataPAdn.mif PAb0s.mif -nthreads $ncpus -bzero -force
-
 mrcat APb0s.mif PAb0s.mif allb0s.mif -axis 3 -force -nthreads 1
 
 fi
 
-dwiextract rawdataAPdn.mif APb0s.mif -bzero -force -nthreads $ncpus
+#Eddy correction & bias correction
 
 if ([ $ismultiband = 1 ]); then
 
