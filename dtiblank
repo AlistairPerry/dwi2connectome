@@ -5,7 +5,7 @@
 # These will be interpreted by the job submission system (PBS pro)
 
 #PBS -v ncpus=8,MRTRIX=/opt/software/mrtrix3/rc3
-#PBS -l nodes=1:ppn=8,mem=2G
+#PBS -l nodes=1:ppn=8,mem=4G
 # *select* is the number of parallel processes
 # *ncpus* is the number of cores required by each process
 # *mem* is the amount of memory required by each process
