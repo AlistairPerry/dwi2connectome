@@ -43,7 +43,7 @@ mrconvert $SUBJECTS_DIR/$subj/mri/T1.mgz FS.nii -nthreads $ncpus -force
 #5ttgen_alt brainFS.nii FS2mni.mat 5TTfsl.nii
 
 
-bet T1.nii T1bet -B
+#bet T1.nii T1bet -B - remove for now, imcp missing and bet will crash
 
 mrconvert $SUBJECTS_DIR/$subj/mri/brain.mgz brainFSsp.nii -nthreads $ncpus -force
 
@@ -135,7 +135,7 @@ mv rFSrgstr.nii rFSrg.nii
 
 #Move other files from T1 space
 
-transformconvert FS2FSL.mat brainFSsp.nii T1bet.nii.gz flirt_import FS2FSLMR.mat -force -nthreads $ncpus
+transformconvert FS2FSL.mat brainFSsp.nii T1.nii flirt_import FS2FSLMR.mat -force -nthreads $ncpus
 
 mrtransform 5TT.nii 5TTFSspmasked.nii -linear FS2FSLMR.mat -inverse -force -nthreads $ncpus
 
