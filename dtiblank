@@ -38,7 +38,7 @@ module load freesurfer/6.0.0
 module load ants/2.1.0
 
 #Manually add other software
-FSLDIR=/home/mpib/perry/fsl-5.0.11
+FSLDIR=/home/mpib/LNDG/FSL/fsl-5.0.11
 . ${FSLDIR}/etc/fslconf/fsl.sh
 PATH=${FSLDIR}/bin:${PATH}
 export FSLDIR PATH

@@ -96,30 +96,38 @@ bet2 eddymeanb0.nii eddyb0brainfsl -m -f 0.15
 dwibiascorrect -mask eddyb0brainfsl_mask.nii.gz -ants eddycorr.mif biascorr.mif -nthreads $ncpus -force
 
 
-#create optimal mask
+#create optimal mask - remove MRtrix version. Too unstable
 
-dwi2mask biascorr.mif biasmaskMR.nii -force -nthreads $ncpus
+#dwi2mask biascorr.mif biasmaskMR.nii -force -nthreads $ncpus
 
-fslmaths eddyb0brainfsl_mask -mas biasmaskMR.nii iterbrainmask
+#fslmaths eddyb0brainfsl_mask -mas biasmaskMR.nii iterbrainmask
 
-gunzip iterbrainmask.nii.gz -f
+#gunzip iterbrainmask.nii.gz -f
+
+
+dwiextract biascorr.mif -nthreads $ncpus -bzero - | mrmath -axis 3 - mean biasmeanb0.nii -nthreads $ncpus -force
+
+bet biasmeanb0.nii biasmeanb0bet -R -f 0.2 -m
+
 
 dwishellmath biascorr.mif mean meanshell.mif -nthreads $ncpus -force
 
 
 #Create tensor and FA images
 
-dwiextract biascorr.mif -nthreads $ncpus -bzero - | mrmath -axis 3 - mean biasmeanb0.nii -force -nthreads $ncpus
+#dwiextract biascorr.mif -nthreads $ncpus -bzero - | mrmath -axis 3 - mean biasmeanb0.nii -force -nthreads $ncpus
 
-fslmaths biasmeanb0.nii -mas iterbrainmask.nii biasmeanb0masked
+#fslmaths biasmeanb0.nii -mas iterbrainmask.nii biasmeanb0masked
 
 #gunzip -f biasmeanb0bet.nii.gz
 
 
 #add further bet2 option so later pipeline doesn't break!
 
-bet2 biasmeanb0masked biasmeanb0bet -f 0.10 -m 
+#bet2 biasmeanb0masked biasmeanb0bet -f 0.10 -m 
 
-dwi2tensor biascorr.mif dt.nii -mask iterbrainmask.nii -nthreads $ncpus -force
+#dwi2tensor biascorr.mif dt.nii -mask iterbrainmask.nii -nthreads $ncpus -force
+
+dwi2tensor biascorr.mif dt.nii -mask biasmeanb0bet_mask.nii.gz
 
 tensor2metric dt.nii -fa fa.nii -nthreads $ncpus -force
