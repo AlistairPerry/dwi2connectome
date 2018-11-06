@@ -5,11 +5,11 @@
 #Template file which sets up PBS requirements for all job
 
 WORKDIR=$1
-OUTDIR=$WORKDIR/glasser
 
 export OMP_NUM_THREADS=$ncpus
 
 export SUBJECTS_DIR=${WORKDIR}/FS
+OUTDIR=$SUBJECTS_DIR/glasser
 
 cd $SUBJECTS_DIR
 
