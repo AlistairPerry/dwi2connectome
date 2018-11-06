@@ -5,7 +5,7 @@
 #Template file which sets up PBS requirements for all job
 
 WORKDIR=$1
-OUTDIR=glasser
+OUTDIR=$WORKDIR/glasser
 
 export OMP_NUM_THREADS=$ncpus
 
