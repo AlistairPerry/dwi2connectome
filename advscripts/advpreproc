@@ -93,7 +93,9 @@ bet2 eddymeanb0.nii eddyb0brainfsl -m -f 0.15
 
 #bias correction
 
-dwibiascorrect -mask eddyb0brainfsl_mask.nii.gz -ants eddycorr.mif biascorr.mif -nthreads $ncpus -force
+#change to fsl software as ANTs doesn't appear to work with strong signal artifact in StateSwitch..
+
+dwibiascorrect -mask eddyb0brainfsl_mask.nii.gz -fsl eddycorr.mif biascorr.mif -nthreads $ncpus -force
 
 
 #create optimal mask - remove MRtrix version. Too unstable
