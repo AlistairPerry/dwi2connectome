@@ -15,31 +15,31 @@ This pipeline provides a streamlined way of processing diffusion weighted images
 
 ## Getting started
 
-[Conversion to NiFTI for T1](https://github.com/breakspear/diffusion-pipeline/tree/master/docs/structural_preprocessing/conversion_to_nifti.rst)
+[Conversion to NiFTI for T1](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/structural_preprocessing/conversion_to_nifti.rst)
 
-[Conversion to MIF for DWI](https://github.com/breakspear/diffusion-pipeline/tree/master/docs/dwi_preprocessing/conversion_to_mif.md)
+[Conversion to MIF for DWI](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/dwi_preprocessing/conversion_to_mif.md)
 
 ## Structural image preprocessing
 
-[FreeSurfer preprocessing](https://github.com/breakspear/diffusion-pipeline/tree/master/docs/structural_preprocessing/t1_processing_in_freesurfer.rst)
+[FreeSurfer preprocessing](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/structural_preprocessing/t1_processing_in_freesurfer.rst)
 
 ## Diffusion image preprocessing
 
-[Advanced preprocessing](https://github.com/breakspear/diffusion-pipeline/tree/master/docs/dwi_preprocessing/advanced_preprocessing.md)
+[Advanced preprocessing](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/dwi_preprocessing/advanced_preprocessing.md)
 
-[Segmentation and parcellation](https://github.com/breakspear/diffusion-pipeline/tree/master/docs/dwi_preprocessing/segmentation_and_parcellation.md)
+[Segmentation and parcellation](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/dwi_preprocessing/segmentation_and_parcellation.md)
 
-[Fibre and connectome construction](https://github.com/breakspear/diffusion-pipeline/tree/master/docs/dwi_preprocessing/fibre_and_connectome_construction.md)
+[Fibre and connectome construction](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/dwi_preprocessing/fibre_and_connectome_construction.md)
 
 ## Fixel-based analysis
 
-[Fixel processing pipeline](docs/fixel_based_analysis/processing_fixels.md)
+[Fixel processing pipeline](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/fixel_based_analysis/processing_fixels.md)
 
 [Fixel statistics](docs/fixel_stats.md)
 
 ## Quality checking
 
-[Quality checking of images](docs/quality_checking/qc.md)
+[Quality checking of images](https://github.com/AlistairPerry/dwi2connectome/blob/master/docs/quality_checking/qc.md)
 
 ## Troubleshooting
 
