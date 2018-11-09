@@ -10,17 +10,8 @@ This pipeline provides a streamlined way of processing diffusion weighted images
 	
 2) Install the github package:
 
-  `$ git clone https://github.com/breakspear/diffusion-pipeline.git`
+  `$ git clone https://github.com/AlistairPerry/dwi2connectome.git`
 
-3) Make sure your bash environment is setup correctly:
-
-  `$ cp ~/diffusion-pipeline/.bashrc ~/.`
-
-You will need to restart your terminal session:
-
-  `$ bash`
-
-for these changes to take effect. You may also wish to copy the contents of the .bashrc file into an existing .bashrc file in your home directory.
 
 ## Getting started
 
