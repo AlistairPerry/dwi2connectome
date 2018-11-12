@@ -1,4 +1,4 @@
-# Welcome to SNG Diffusion Pipeline's user documentation!
+# Welcome to the user documentation!
 
 This pipeline provides a streamlined way of processing diffusion weighted images (and as a side effect, structural images) through the *MRtrix*, *FSL* and *FreeSurfer* packages.
 
