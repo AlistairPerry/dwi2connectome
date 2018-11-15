@@ -31,7 +31,12 @@ fod2dec wm.mif foddec.mif -force -nthreads $ncpus
 
 #Fiber tracking
 
+#For now delete any pre-existing tck files
+rm *.tck
+
 tckgen -algorithm iFOD2 wm.mif ${numfibers}.tck -seed_image iterbrainmask.nii -minlength 10 -maxlength 250 -select $numfibers -nthreads $ncpus -mask iterbrainmask.nii -output_seeds sucesstrackseeds.txt
 
 #Track density image for vis purposes
 tckmap ${numfibers}.tck ${numfibers}_tdi.nii -vox 0.5
+
+gzip ${numfibers}.tck

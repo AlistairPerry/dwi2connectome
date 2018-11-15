@@ -8,9 +8,15 @@ WORKDIR=$2
 
 mkdir -p $WORKDIR/Diff/$subj/preproc
 
-rsync *rawdata* $WORKDIR/Diff/$subj/preproc
+mrconvert dwi/${subj}_acq-AP_dwi.mif $WORKDIR/Diff/$subj/preproc/rawdata.mif -force -nthreads 1
 
-rsync *encoding* $WORKDIR/Diff/$subj/preproc
+
+#Now extract the encoding files, and rename
+
+cp dwi/${subj}_acq-AP_dwi.b $WORKDIR/Diff/$subj/preproc/rawencoding.b
+
+
+#Go to working directory
 
 cd $WORKDIR/Diff/$subj/preproc
 
@@ -27,9 +33,11 @@ fi
 
 #cp rawdata.mif preproc 
 
+
 #Denoise the rawdata
 
 dwidenoise rawdata.mif rawdata-dn.mif -force -nthreads $ncpus
+
 
 #Re-convert to the correct stride
 
@@ -39,9 +47,11 @@ mrconvert rawdata-dnstr.mif  rawdata-dn.mif -strides +1,2,3,4 -force -nthreads $
 
 rm rawdata-dnstr.mif
 
+
 #Eddy and motion correction
 
-dwipreproc -rpe_none -pe_dir AP -export_grad_mrtrix adjencoding.b rawdata-dn.mif eddycorr.mif -eddy_options " --repol " -nthreads $ncpus -debug -tempdir . -nocleanup -force
+dwipreproc -rpe_none -pe_dir AP -export_grad_mrtrix adjencoding.b rawdata-dn.mif eddycorr.mif -eddy_options " --repol --slm=linear" -nthreads $ncpus -debug -tempdir . -nocleanup -force
+
 
 #Construct the b0 mask for future processing 
 
