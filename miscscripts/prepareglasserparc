@@ -25,7 +25,7 @@
 # *M* email address to send emails to
 
 WORKDIR=$1
-OUTDIR=$2
+OUTDIR=${WORKDIR}/FS/glasser
 
 #PBS -e ${WORKDIR}/batch/prepareglassererror.txt
 #PBS -o ${WORKDIR}/batch/prepareglasseroutput.txt
@@ -60,14 +60,14 @@ fi
 
 if [ ! -f create_subj_volume_parcellation.sh ]; then
 
-rsync /mnt/backedup/home/alistaiP/bundle/test/diffusion-pipeline/miscscripts/create_subj_volume_parcellation.sh .
+rsync ~/diffusion-pipeline/miscscripts/create_subj_volume_parcellation.sh .
 
 fi
 
 if [ ! -f lh.HCPMMP1.annot ]; then
 
-rsync /mnt/backedup/home/alistaiP/bundle/test/diffusion-pipeline/data/lh.HCPMMP1.annot .
-rsync /mnt/backedup/home/alistaiP/bundle/test/diffusion-pipeline/data/rh.HCPMMP1.annot .
+rsync ~/diffusion-pipeline/data/lh.HCPMMP1.annot .
+rsync ~/diffusion-pipeline/data/rh.HCPMMP1.annot .
 
 fi
 
