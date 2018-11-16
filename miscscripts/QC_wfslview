@@ -36,14 +36,14 @@ slicer meandwishell.nii -a meandwi_sliced.ppm
 convert meandwi_sliced.ppm ${WORKDIR}/QC/meanDWI/${subj}_meandwi.png
 
 
-#masks
+#brain masks
 
 overlay 1 1 meandwishell.nii -A biasmeanb0bet_mask.nii.gz 1 1 mask_overlay.nii.gz
 slicer mask_overlay.nii.gz  -a maskoverlay_sliced.ppm
 convert maskoverlay_sliced.ppm ${WORKDIR}/QC/Masks/${subj}_maskoverlay.png
 
 
-#gmwmi
+#segmentation of grey/white matter interface  
 
 overlay 1 0 brainFSnat.nii -A 5TTgmwmi.nii 0.25 1 gmwmi_overlay.nii.gz
 slicer gmwmi_overlay.nii.gz -a gmwmioverlay_sliced.ppm
