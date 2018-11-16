@@ -1,9 +1,8 @@
 #!/bin/bash
 subj=$1
 WORKDIR=$2
-OUTDIR=$3
 
-tckbasename=$4
+tckbasename=$3
 
 rundir=$(pwd)
 baserundir=$(basename $rundir)
@@ -38,15 +37,9 @@ convert meandwi_sliced.ppm ${WORKDIR}/QC/meanDWI/${subj}_meandwi.png
 
 #masks
 
-overlay 1 1 meandwishell.nii -A iterbrainmask.nii 1 mask_overlay.nii.gz
+overlay 1 1 meandwishell.nii -A iterbrainmask.nii 1 1 mask_overlay.nii.gz
 slicer mask_overlay.nii.gz  -a maskoverlay_sliced.ppm
 convert maskoverlay_sliced.ppm ${WORKDIR}/QC/Masks/${subj}_maskoverlay.png
-
-
-#track densities
-
-slicer  ${tckbasename}.nii -a tdi_sliced.ppm
-convert tdi_sliced.ppm ${WORKDIR}/QC/tdi/${subj}_tdi.png
 
 
 #alignment between anatomical and diffusion images
@@ -62,5 +55,14 @@ overlay 1 1 fa.nii -A rparc_fixsubcort.nii 1 `fslstats rparc_fixsubcort.nii -R |
 slicer parc_overlay.nii.gz  -a parcoverlay_sliced.ppm
 convert parcoverlay_sliced.ppm ${WORKDIR}/QC/parc/${subj}_parcoverlay.png 
 rm parc_overlay.nii.gz
+
+
+#track densities
+
+slicer  ${tckbasename}.nii -a tdi_sliced.ppm
+convert tdi_sliced.ppm ${WORKDIR}/QC/tdi/${subj}_tdi.png
+
+
+
 
 rm *.ppm
