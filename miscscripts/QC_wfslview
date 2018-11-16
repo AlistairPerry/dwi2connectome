@@ -15,6 +15,7 @@ mkdir -p ${WORKDIR}/QC
 mkdir -p ${WORKDIR}/QC/Masks
 mkdir -p ${WORKDIR}/QC/FA
 mkdir -p ${WORKDIR}/QC/meanDWI
+mkdir -p ${WORKDIR}/QC/gmwmi
 mkdir -p ${WORKDIR}/QC/tdi
 mkdir -p ${WORKDIR}/QC/parc
 mkdir -p ${WORKDIR}/QC/coreg
@@ -42,6 +43,13 @@ slicer mask_overlay.nii.gz  -a maskoverlay_sliced.ppm
 convert maskoverlay_sliced.ppm ${WORKDIR}/QC/Masks/${subj}_maskoverlay.png
 
 
+#gmwmi
+
+overlay 1 0 brainFSnat.nii -A 5TTgmwmi.nii 0.25 1 gmwmi_overlay.nii.gz
+slicer gmwmi_overlay.nii.gz -a gmwmioverlay_sliced.ppm
+convert gmwmioverlay_sliced.ppm ${WORKDIR}/QC/gmwmi/${subj}_gmwmioverlay.png
+
+
 #alignment between anatomical and diffusion images
 
 overlay 1 0 rFSrg.nii -A fa.nii 0.25 1.5 FA_overlay_onT1.nii.gz
@@ -61,8 +69,6 @@ rm parc_overlay.nii.gz
 
 slicer  ${tckbasename}.nii -a tdi_sliced.ppm
 convert tdi_sliced.ppm ${WORKDIR}/QC/tdi/${subj}_tdi.png
-
-
 
 
 rm *.ppm
