@@ -2,6 +2,8 @@
 
 This pipeline provides a streamlined way of processing diffusion weighted images (and as a side effect, structural images) through the *MRtrix*, *FSL* and *FreeSurfer* packages. Note that this currently only works on the Avalon cluster at QIMR. If you would like to adapt the scripts to your own HPC cluster please feel free to fork the repository.
 
+Also, please note that this tutorial is intended to be followed sequentially, so if you're skipping around you might get a bit lost.
+
 ## Setup Information
 
 1) Ensure that you are in your home directory::
