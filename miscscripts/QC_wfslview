@@ -4,7 +4,6 @@ WORKDIR=$2
 OUTDIR=$3
 
 tckbasename=$4
-parcbasename=$5
 
 rundir=$(pwd)
 baserundir=$(basename $rundir)
@@ -13,43 +12,51 @@ if [ "$rundir" != "$WORKDIR/Diff/$subj/preproc" ]; then
 cd $WORKDIR/Diff/$subj/preproc
 fi
 
-
 mkdir -p ${WORKDIR}/${OUTDIR}
 mkdir -p ${WORKDIR}/${OUTDIR}/Masks
 mkdir -p ${WORKDIR}/${OUTDIR}/FA
 mkdir -p ${WORKDIR}/${OUTDIR}/meanDWI
 mkdir -p ${WORKDIR}/${OUTDIR}/tdi
 mkdir -p ${WORKDIR}/${OUTDIR}/parc
+mkdir -p ${WORKDIR}/${OUTDIR}/coreg
 
 nshells=$(mrinfo meanshell.mif -size)
 lastdwidim=$(echo $nshells | awk -F " " '{print $NF}')
-mrconvert eddycorr.mif meandwieddy.nii -coord 3 $(( $lastdwidim-1 )) -nthreads 1
-
-#masks
-overlay 1 1 meandwieddy.nii -A iterbrainmask.nii 1 mask_overlay.nii.gz
-slicer mask_overlay.nii.gz  -a maskoverlay_sliced.ppm
-convert maskoverlay_sliced.ppm ${WORKDIR}/${OUTDIR}/Masks/${subj}_maskoverlay.png
 
 #fa
 
 slicer fa.nii -a fa_sliced.ppm
 convert fa_sliced.ppm ${WORKDIR}/${OUTDIR}/FA/${subj}_fa.png
 
-#b3000
 
-#nshells=$(mrinfo meanshell.mif -size)
-#nshells=$(mrinfo meanshell.mif -size)
-#lastdwidim=$(echo $nshells | awk -F " " '{print $NF}')
+#main diffusion-weighted volume
+
 mrconvert meanshell.mif meandwishell.nii -coord 3 $(( $lastdwidim-1 )) -nthreads 1
 slicer meandwishell.nii -a meandwi_sliced.ppm
 convert meandwi_sliced.ppm ${WORKDIR}/${OUTDIR}/meanDWI/${subj}_meandwi.png
 
-#tdi
+
+#masks
+
+overlay 1 1 meandwishell.nii -A iterbrainmask.nii 1 mask_overlay.nii.gz
+slicer mask_overlay.nii.gz  -a maskoverlay_sliced.ppm
+convert maskoverlay_sliced.ppm ${WORKDIR}/${OUTDIR}/Masks/${subj}_maskoverlay.png
+
+
+#track densities
 
 slicer  ${tckbasename}.nii -a tdi_sliced.ppm
 convert tdi_sliced.ppm ${WORKDIR}/${OUTDIR}/tdi/${subj}_tdi.png
 
-#parc
+
+#alignment between anatomical and diffusion images
+
+overlay 1 0 rFSrg.nii -A fa.nii 0.25 1.5 FA_overlay_onT1.nii.gz
+slicer FA_overlay_onT1.nii.gz  -a FAoverlayonT1_sliced.ppm
+convert FAoverlayonT1_sliced.ppm ${WORKDIR}/${OUTDIR}/coreg/${subj}_FAoverlayonT1.png 
+
+
+#parcellation overlap 
 
 overlay 1 1 fa.nii -A rparc_fixsubcort.nii 1 `fslstats rparc_fixsubcort.nii -R | awk -F " " '{print $2}'` parc_overlay.nii.gz
 slicer parc_overlay.nii.gz  -a parcoverlay_sliced.ppm
