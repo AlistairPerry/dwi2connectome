@@ -46,9 +46,9 @@ _Things to look out for_:
 
 ### 5. Segmentation of different tissue types
 
-_Files_: `brainFSnat.nii`, `5TT.nii` (as overlay)
+_Files_: `brainFSnat.nii`, `5TT.nii`, or `5TTgmwmi.nii` (as overlay)
 
-_Steps_: Scroll through each volume of 5TT file.
+_Steps_: Scroll through each volume of 5TT file, or rather the boundary of the 5TTgmwmi.
 
 _Things to look out for_:
 
@@ -56,6 +56,7 @@ _Things to look out for_:
 * Known issues:
 	* Grey matter segments are missing, white matter extends to skull
 	* White matter classification is scarce, missing areas near the cortical layers
+	* Grey matter / white matter interface should be consistent at superficial cortical layers
 
 ### 6. Inspect parcellation files
 
