@@ -26,7 +26,7 @@ lastdwidim=$(echo $nshells | awk -F " " '{print $NF}')
 #fa
 
 slicesdir fa.nii
-cp slicesdir fa.png ${WORKDIR}/QC/FA/${subj}_fa.png
+cp slicesdir/fa.png ${WORKDIR}/QC/FA/${subj}_fa.png
 rm -rf slicesdir
 
 #main diffusion-weighted volume
