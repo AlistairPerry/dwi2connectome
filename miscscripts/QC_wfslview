@@ -25,16 +25,16 @@ lastdwidim=$(echo $nshells | awk -F " " '{print $NF}')
 
 #fa
 
-slicer fa.nii -a fa_sliced.ppm
-convert fa_sliced.ppm ${WORKDIR}/QC/FA/${subj}_fa.png
-
+slicesdir fa.nii
+cp slicesdir fa.png ${WORKDIR}/QC/FA/${subj}_fa.png
+rm -rf slicesdir
 
 #main diffusion-weighted volume
 
 mrconvert meanshell.mif meandwishell.nii -coord 3 $(( $lastdwidim-1 )) -nthreads 1
-slicer meandwishell.nii -a meandwi_sliced.ppm
-convert meandwi_sliced.ppm ${WORKDIR}/QC/meanDWI/${subj}_meandwi.png
-
+slicesdir meandwishell.nii
+cp slicesdir/meandwishell.png ${WORKDIR}/QC/meanDWI/${subj}_meandwi.png
+rm -rf slicesdir
 
 #brain masks
 
