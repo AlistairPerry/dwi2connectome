@@ -38,9 +38,9 @@ convert meandwi_sliced.ppm ${WORKDIR}/QC/meanDWI/${subj}_meandwi.png
 
 #masks
 
-overlay 1 1 meandwishell.nii -A biasmeanb0bet_mask.nii.gz 1 1 mask_overlay.nii.gz
-slicer mask_overlay.nii.gz  -a maskoverlay_sliced.ppm
-convert maskoverlay_sliced.ppm ${WORKDIR}/QC/Masks/${subj}_maskoverlay.png
+overlay 1 1 meandwishell.nii -A biasmeanb0bet.nii.gz 1 10 mask_overlay.nii.gz
+cp slicesdir/mask_overlay.png ${WORKDIR}/QC/Masks/${subj}_maskoverlay.png
+rm -rf slicesdir
 
 
 #gmwmi
