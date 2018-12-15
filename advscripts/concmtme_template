@@ -20,33 +20,60 @@ else
 	DATADIR=${WORKDIR}/$6
 fi
 
-flirt -ref /home/mpib/LNDG/FSL/fsl-5.0.11/data/standard/MNI152_T1_1mm_brain.nii.gz -in ${DATADIR}/${subj}/preproc/brainFS.nii -omat FS2MNI.mat -out FS2MNI -dof 12
+
+#save outputs into new directory
+
+mkdir -p ${DATADIR}/${subj}/preproc/${parcname}/
+
+cd ${DATADIR}/${subj}/preproc/${parcname}/
+
+
+#initial filesetup
+
+flirt -ref ${FSLDIR}/data/standard/MNI152_T1_1mm_brain.nii.gz -in ${DATADIR}/${subj}/preproc/brainFS.nii -omat FS2MNI.mat -out FS2MNI -dof 12
 
 convert_xfm -omat MNI2FS.mat -inverse FS2MNI.mat
 
-flirt -in $parcimage -ref ${DATADIR}/${subj}/preproc/brainFS.nii -applyxfm -init MNI2FS.mat -interp nearestneighbour -out ${parcname}_inFS
+
+flirt -in ${parcimage} -ref ${DATADIR}/${subj}/preproc/brainFS.nii -applyxfm -init MNI2FS.mat -interp nearestneighbour -out ${parcname}_inFS
 
 convert_xfm -omat FS2diff.mat -inverse ${DATADIR}/${subj}/preproc/diff2FS.mat
 
 flirt -in ${parcname}_inFS -ref ${DATADIR}/${subj}/preproc/fa.nii -applyxfm -init FS2diff.mat -interp nearestneighbour -out ${parcname}_inDiff
 
 
+#check for gziped trackfile
+
+gunzip ${DATADIR}/${subj}/preproc/${numfibers}.tck.gz
+
+
 #connectome construction
 
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_streamweights.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_streamweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invlengthweights.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invlengthweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invnodeweights.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invnodeweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/ ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
 
-
-#non-sifted
 
 #non-sifted
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_streamweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_invlengthweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_streamweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_invnodelengthweights_nosift.csv  -assignment_radial_search 2 -zero_diagonal -scale_invlength -scale_invnodevol -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_invlengthweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
+
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_invnodelengthweights_nosift.csv  -assignment_radial_search 2 -zero_diagonal -scale_invlength -scale_invnodevol -force -nthreads $ncpus
+
+
+#create exemplar connectome - actually a good QC approach..
+
+connectome2tck ${DATADIR}/${subj}/preproc/${numfibers}.tck -exemplars ${parcname}_inDiff.nii.gz -files single streamlineassignment.txt ${numfibers}_${parcname}_connectomeexem.tck -nthreads $ncpus -force
+
+
+#rezip track file
+
+gunzip ${DATADIR}/${subj}/preproc/${numfibers}.tck
+
+cd ..
