@@ -30,7 +30,7 @@ cd ${DATADIR}/${subj}/preproc/${parcname}/
 
 #initial filesetup
 
-flirt -ref ${FSLDIR}/data/standard/MNI152_T1_1mm_brain.nii.gz -in ${DATADIR}/${subj}/preproc/brainFS.nii -omat FS2MNI.mat -out FS2MNI -dof 12
+flirt -ref ${FSLDIR}/data/standard/MNI152_T1_1mm_brain.nii.gz -in ${DATADIR}/${subj}/preproc/brainFSsp.nii -omat FS2MNI.mat -out FS2MNI -dof 12
 
 convert_xfm -omat MNI2FS.mat -inverse FS2MNI.mat
 
@@ -69,7 +69,7 @@ tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.ni
 
 #create exemplar connectome - actually a good QC approach..
 
-connectome2tck ${DATADIR}/${subj}/preproc/${numfibers}.tck -exemplars ${parcname}_inDiff.nii.gz -files single streamlineassignment.txt ${numfibers}_${parcname}_connectomeexem.tck -nthreads $ncpus -force
+#connectome2tck ${DATADIR}/${subj}/preproc/${numfibers}.tck -exemplars ${parcname}_inDiff.nii.gz -files single streamlineassignment.txt ${numfibers}_${parcname}_connectomeexem.tck -nthreads $ncpus -force
 
 
 #rezip track file

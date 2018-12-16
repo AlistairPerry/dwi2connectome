@@ -7,7 +7,7 @@ WORKDIR=$2
 
 #arguments to be set
 ismultiband=0
-parc=DST
+parc="DST"
 ismultishell=0
 numfibers=25M
 
