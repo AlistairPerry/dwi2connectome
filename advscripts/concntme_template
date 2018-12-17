@@ -55,7 +55,7 @@ tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.ni
 
 tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invnodeweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/ ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/ ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
 
 
 #non-sifted
