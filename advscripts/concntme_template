@@ -74,6 +74,6 @@ tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.ni
 
 #rezip track file
 
-gunzip ${DATADIR}/${subj}/preproc/${numfibers}.tck
+gzip ${DATADIR}/${subj}/preproc/${numfibers}.tck
 
 cd ..
