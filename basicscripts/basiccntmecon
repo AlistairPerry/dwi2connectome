@@ -38,3 +38,5 @@ tck2connectome ${tracksbasename}.tck ${CNTMEPREFIX}_flirted_uniform.nii connecto
 tck2connectome ${tracksbasename}.tck ${CNTMEPREFIX}_flirted_uniform.nii connectome_${CNTMEPREFIX}_trackcount.csv -zero_diagonal -assignment_radial_search 2 -force -nthreads $ncpus
 
 tck2connectome ${tracksbasename}.tck ${CNTMEPREFIX}_flirted_uniform.nii connectome_${CNTMEPREFIX}_invnodeandlengths.csv -scale_invnodevol -scale_invlength -zero_diagonal -assignment_radial_search 2 -force -nthreads $ncpus
+
+gzip ${tracksbasename}.tck
