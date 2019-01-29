@@ -54,22 +54,22 @@ gunzip ${DATADIR}/${subj}/preproc/${numfibers}.tck.gz
 
 #connectome construction
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_streamweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${numfibers}_${parcname}_streamweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invlengthweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${numfibers}_${parcname}_invlengthweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invnodeweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${numfibers}_${parcname}_invnodeweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${numfibers}_${parcname}_meanfiberlengths.csv -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
 
 
 #non-sifted
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_streamweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${numfibers}_${parcname}_streamweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_invlengthweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${numfibers}_${parcname}_invlengthweights_nosift.csv -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${parcname}_invnodelengthweights_nosift.csv  -assignment_radial_search 2 -zero_diagonal -scale_invlength -scale_invnodevol -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz ${numfibers}_${parcname}_invnodelengthweights_nosift.csv  -assignment_radial_search 2 -zero_diagonal -scale_invlength -scale_invnodevol -force -nthreads $ncpus
 
 
 #create exemplar connectome - actually a good QC approach..
