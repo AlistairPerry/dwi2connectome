@@ -30,12 +30,17 @@ cd ${DATADIR}/${subj}/preproc/${parcname}/
 
 #initial filesetup
 
-flirt -ref ${FSLDIR}/data/standard/MNI152_T1_1mm_brain.nii.gz -in ${DATADIR}/${subj}/preproc/brainFSsp.nii -omat FS2MNI.mat -out FS2MNI -dof 12
+flirt -ref ${FSLDIR}/data/standard/MNI152_T1_1mm_brain.nii.gz -in ${DATADIR}/${subj}/preproc/brainFS.nii -omat FS2MNI.mat -out FS2MNI -dof 12
 
 convert_xfm -omat MNI2FS.mat -inverse FS2MNI.mat
 
 
 flirt -in ${parcimage} -ref ${DATADIR}/${subj}/preproc/brainFS.nii -applyxfm -init MNI2FS.mat -interp nearestneighbour -out ${parcname}_inFS
+
+mrconvert ${parcname}_inFS.nii.gz ${parcname}_inFS_str.nii.gz -strides -1,3,-2 -force -nthreads 1
+
+mv ${parcname}_inFS_str.nii.gz ${parcname}_inFS.nii.gz
+
 
 convert_xfm -omat FS2diff.mat -inverse ${DATADIR}/${subj}/preproc/diff2FS.mat
 
@@ -55,7 +60,7 @@ tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.ni
 
 tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_invnodeweights.csv -tck_weights_in ${DATADIR}/${subj}/preproc/sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
 
-tck2connectome ${DATADIR}/${subj}/preproc/ ${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
+tck2connectome ${DATADIR}/${subj}/preproc/${numfibers}.tck ${parcname}_inDiff.nii.gz  ${parcname}_meanfiberlengths.csv -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
 
 
 #non-sifted
