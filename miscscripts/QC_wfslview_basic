@@ -1,0 +1,60 @@
+#!/bin/bash
+subj=$1
+WORKDIR=$2
+
+CNTMEPREFIX=$3
+tckbasename=$4
+
+rundir=$(pwd)
+baserundir=$(basename $rundir)
+
+if [ "$rundir" != "$WORKDIR/Diff/${subj}/preproc" ]; then
+cd $WORKDIR/Diff/${subj}/preproc
+fi
+
+mkdir -p ${WORKDIR}/QC
+mkdir -p ${WORKDIR}/QC/Masks
+mkdir -p ${WORKDIR}/QC/FA
+mkdir -p ${WORKDIR}/QC/meanDWI
+mkdir -p ${WORKDIR}/QC/tdi
+mkdir -p ${WORKDIR}/QC/parc
+
+#fa
+
+slicesdir fa.nii
+cp slicesdir/fa.png ${WORKDIR}/QC/FA/${subj}_fa.png
+rm -rf slicesdir
+
+
+#main diffusion-weighted volume
+
+dwiextract biascorr.mif - | mrmath - mean meandwi.nii -axis 3 -force -nthreads 1
+
+slicesdir meandwi.nii
+cp slicesdir/meandwi.png ${WORKDIR}/QC/meanDWI/${subj}_meandwi.png
+rm -rf slicesdir
+
+
+#brain masks
+
+overlay 1 1 meandwi.nii -A iterbrainmask.nii 1 10 mask_overlay.nii.gz
+slicesdir mask_overlay.nii.gz
+cp slicesdir/mask_overlay.png ${WORKDIR}/QC/Masks/${subj}_maskoverlay.png
+rm -rf slicesdir
+
+
+#parcellation overlap 
+
+overlay 1 1 fa.nii -A ${CNTMEPREFIX}_flirted_uniform.nii 1 `fslstats ${CNTMEPREFIX}_flirted_uniform.nii -R | awk -F " " '{print $2}'` parc_overlay.nii.gz
+slicer parc_overlay.nii.gz  -a parcoverlay_sliced.ppm
+convert parcoverlay_sliced.ppm ${WORKDIR}/QC/parc/${subj}_parcoverlay.png 
+rm parc_overlay.nii.gz
+
+
+#track densities
+
+slicer  ${tckbasename}_tdi.nii -a tdi_sliced.ppm
+convert tdi_sliced.ppm ${WORKDIR}/QC/tdi/${subj}_tdi.png
+
+
+rm *.ppm
