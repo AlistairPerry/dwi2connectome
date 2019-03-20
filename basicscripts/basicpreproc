@@ -57,7 +57,7 @@ dwipreproc -rpe_none -pe_dir AP -export_grad_mrtrix adjencoding.b rawdata-dn.mif
 
 mrconvert eddycorr.mif eddyb0.nii -coord 3 0 -force -nthreads $ncpus
 
-bet2 eddyb0.nii eddyb0brainfsl -m -f 0.15
+bet2 eddyb0.nii eddyb0brainfsl -m -f 0.10 #keep it liberal to prevent brain tissue being erroneously removed
 
 
 #Bias correction
@@ -65,7 +65,16 @@ bet2 eddyb0.nii eddyb0brainfsl -m -f 0.15
 dwibiascorrect -mask eddyb0brainfsl_mask.nii.gz -fsl eddycorr.mif biascorr.mif -force -nthreads $ncpus -tempdir .
 
 
-#create optimal mask
+#B0 mask - from biascorr
+
+dwiextract biascorr.mif -bzero - | mrmath - mean meanbiasb0.nii -axis 3 -force -nthreads 1
+
+bet2 meanb0.nii meanbiasb0brain -m -f 0.15 
+
+gunzip meanbiasb0brain_mask.nii.gz -f
+
+
+#create optimal mask vers
 
 dwi2mask biascorr.mif biasmaskMR.nii -force -nthreads $ncpus
 
@@ -73,15 +82,16 @@ fslmaths eddyb0brainfsl_mask -mas biasmaskMR.nii iterbrainmask
 
 gunzip iterbrainmask.nii.gz -f
 
-fslmaths biasmeanb0.nii -mask iterbrainmask.nii biasmeanb0bet
+fslmaths meanbiasb0.nii -mask iterbrainmask.nii biasmeanb0bet
 
 #mrconvert biascorr.mif biasb0.nii -coord 3 0 -force -nthreads $ncpus
 #bet2 biasb0.nii biasb0brain -m -f 0.15
+
 
 #Generate tensor and fa images
 
 #dwishellmath biascorr.mif mean meanshell.mif -force -nthreads $ncpus
 
-dwi2tensor biascorr.mif dt.nii -mask iterbrainmask.nii -force -nthreads $ncpus
+dwi2tensor biascorr.mif dt.nii -mask meanbiasb0brain_mask.nii -force -nthreads $ncpus
 
 tensor2metric dt.nii -fa fa.nii -force -nthreads $ncpus
