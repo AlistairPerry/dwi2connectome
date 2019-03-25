@@ -69,7 +69,7 @@ dwibiascorrect -mask eddyb0brainfsl_mask.nii.gz -fsl eddycorr.mif biascorr.mif -
 
 dwiextract biascorr.mif -bzero - | mrmath - mean meanbiasb0.nii -axis 3 -force -nthreads 1
 
-bet2 meanb0.nii meanbiasb0brain -m -f 0.15 
+bet2 meanbiasb0.nii meanbiasb0brain -m -f 0.15 
 
 gunzip meanbiasb0brain_mask.nii.gz -f
 
