@@ -45,9 +45,10 @@ fod2dec wm.mif  foddec.mif -mask biasmeanb0bet_mask.nii.gz -force -nthreads $ncp
 
 rm *.tck.gz
 
-tckgen wm.mif ${numfibers}.tck -act r5TT.nii -backtrack -crop_at_gmwmi -seed_dynamic wm.mif -minlength 10 -maxlength 250 -select ${numfibers} -mask biasmeanb0bet_mask.nii.gz -output_seeds succeeds.txt -force -nthreads $ncpus
+tckgen wm.mif ${numfibers}.tck -act r5TT.nii -backtrack -crop_at_gmwmi -seed_dynamic wm.mif -minlength 10 -maxlength 250 -select ${numfibers} -mask biasmeanb0bet_mask.nii.gz -output_seeds ${numfibers}_succeeds.txt -force -nthreads $ncpus
 
 tckmap ${numfibers}.tck ${numfibers}.nii -vox 0.5 -force -nthreads $ncpus
+
 
 tckgen wm.mif 1M.tck -act r5TT.nii -backtrack -crop_at_gmwmi -seed_dynamic wm.mif -minlength 10 -maxlength 250 -select 1M -mask biasmeanb0bet_mask.nii.gz -output_seeds succeeds1M.txt -force -nthreads $ncpus
 
@@ -74,7 +75,7 @@ tckmap 1M.tck 1Mends.nii -vox 0.5 -force -nthreads $ncpus -ends_only
 
 #tcksift2
 
-tcksift2 ${numfibers}.tck wm.mif sift_weightfactor.txt -act r5TT.nii -fd_scale_gm -force -nthreads $ncpus
+tcksift2 ${numfibers}.tck wm.mif ${numfibers}_sift_weightfactor.txt -act r5TT.nii -fd_scale_gm -force -nthreads $ncpus
 
 #tcksift2 1M.tck wm.mif 1Msift_weightfactor.txt -act r5TT.nii -fd_scale_gm -force -nthreads $ncpus
 
@@ -89,11 +90,11 @@ tcksift2 ${numfibers}.tck wm.mif sift_weightfactor.txt -act r5TT.nii -fd_scale_g
 #Connectome construction
 #sifted
 
-tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_streamweights.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
+tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_streamweights.csv -tck_weights_in ${numfibers}_sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -out_assignments streamlineassignment.txt -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_invlengthweights.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
+tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_invlengthweights.csv -tck_weights_in ${numfibers}_sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invlength -force -nthreads $ncpus
 
-tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_invnodeweights.csv -tck_weights_in sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
+tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_invnodeweights.csv -tck_weights_in ${numfibers}_sift_weightfactor.txt -assignment_radial_search 2 -zero_diagonal -scale_invnodevol -force -nthreads $ncpus
 
 tck2connectome ${numfibers}.tck rparc_fixsubcort.nii ${numfibers}_${CNTMEPREFIX}_meanfiberlengths.csv -assignment_radial_search 2 -zero_diagonal -scale_length -stat_edge mean -force -nthreads $ncpus
 
