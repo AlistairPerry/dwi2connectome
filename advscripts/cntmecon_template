@@ -49,7 +49,7 @@ flirt -in ${parcname}_inFS -ref ${DATADIR}/${subj}/preproc/fa.nii -applyxfm -ini
 
 #check for gziped trackfile
 
-#gunzip ${DATADIR}/${subj}/preproc/${numfibers}.tck.gz
+gunzip ${DATADIR}/${subj}/preproc/${numfibers}.tck.gz
 
 
 #connectome construction
